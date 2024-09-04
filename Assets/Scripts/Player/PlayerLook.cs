@@ -1,5 +1,6 @@
 using UnityEngine;
 
+[RequireComponent(typeof(PlayerInputHandler))]
 public class PlayerLook : MonoBehaviour
 {
     [Header("Components")]
@@ -8,7 +9,14 @@ public class PlayerLook : MonoBehaviour
     [Header("Parameters")]
     [SerializeField] private float _sensitivity = 3f;
 
+    private PlayerInputHandler _playerInputHandler;
     private Vector2 _look;
+    private float _sensitivityMultiplier = 0.1f;
+
+    private void Awake()
+    {
+        _playerInputHandler = GetComponent<PlayerInputHandler>();
+    }
 
     private void Start()
     {
@@ -22,8 +30,8 @@ public class PlayerLook : MonoBehaviour
 
     private void UpdateLook()
     {
-        _look.x += Input.GetAxis("Mouse X") * _sensitivity;
-        _look.y += Input.GetAxis("Mouse Y") * _sensitivity;
+        _look.x += _playerInputHandler.LookInput.x * _sensitivity * _sensitivityMultiplier;
+        _look.y += _playerInputHandler.LookInput.y * _sensitivity * _sensitivityMultiplier;
 
         _look.y = Mathf.Clamp(_look.y, -89f, 89f);
 
